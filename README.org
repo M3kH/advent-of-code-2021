@@ -17,6 +17,38 @@ exit
 #+end_src
 
 * Advent of code 2021 :noexport:
+Welcome to my trip in learning a bit of ~golang~ while doing the [[https://adventofcode.com/2021][Advent of Code]].
+
+You can run the challenges by executing this readme:
+#+begin_example shell
+./README.org <challenge-id>(eg: 0101)
+#+end_example
+
+#+name: orgstrap
+#+begin_src elisp :results none :exports none :lexical yes
+(message "")
+(message "\N{U+1F384} Advent of Code 2021 \N{U+1F384}")
+(message "========================")
+(message "")
+(org-babel-do-load-languages 'org-babel-load-languages
+    '(
+        (shell . t)
+    )
+)
+
+(let ((block-to-execute (nth 1 argv)))
+        (setq org-confirm-babel-evaluate nil)
+        (save-excursion
+        (goto-char
+        (org-babel-find-named-block
+        block-to-execute))
+        (let ((result (funcall 'org-babel-execute-src-block)))
+                (message "")
+                (message "Result \N{U+1F381}:")
+                (message (format "%s" result))
+                (message "")
+                )))
+#+end_src
 
 
 ** Day 1: Sonar Sweep
@@ -24,12 +56,13 @@ Count the number of times a depth measurement increases from the previous measur
 *NB:* /When looping the first item, there is no previous measurement./
 
 #+begin_html
-<details><summary>Result</summary>
+<details><summary>Result <pre>0101</pre></summary>
   <p>
 #+end_html
 
 [[file:src/challenge/0101.go][Source]]
 
+#+name: 0101
 #+begin_src bash :format raw :exports both :dir src
 cat ../dataset/01.txt | go run aoc 0101
 #+end_src
@@ -45,12 +78,13 @@ cat ../dataset/01.txt | go run aoc 0101
 Count the number of times the sum of measurements in this sliding window increases from the previous sum.
 
 #+begin_html
-<details><summary>Result</summary>
+<details><summary>Result <pre>0102</pre></summary>
   <p>
 #+end_html
 
 [[file:src/challenge/0102.go][Source]]
 
+#+name: 0102
 #+begin_src bash :format raw :exports both :dir src
 cat ../dataset/01.txt | go run aoc 0102
 #+end_src
@@ -66,12 +100,13 @@ cat ../dataset/01.txt | go run aoc 0102
 Calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
 
 #+begin_html
-<details><summary>Result</summary>
+<details><summary>Result <pre>0201</pre></summary>
   <p>
 #+end_html
 
 [[file:src/challenge/0201.go][Source]]
 
+#+name: 0201
 #+begin_src bash :format raw :exports both :dir src
 cat ../dataset/02.txt | go run aoc 0201
 #+end_src
@@ -87,12 +122,13 @@ cat ../dataset/02.txt | go run aoc 0201
 Using this new interpretation of the commands, calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
 
 #+begin_html
-<details><summary>Result</summary>
+<details><summary>Result <pre>0202</pre></summary>
   <p>
 #+end_html
 
 [[file:src/challenge/0202.go][Source]]
 
+#+name: 0202
 #+begin_src bash :format raw :exports both :dir src
 cat ../dataset/02.txt | go run aoc 0202
 #+end_src
@@ -105,31 +141,6 @@ cat ../dataset/02.txt | go run aoc 0202
 #+end_html
 
 ** COMMENT Local Utils
-# #+name: orgstrap
-#+begin_src elisp :results none :exports none :lexical yes
-;; This was a good try
-;; (add-to-list 'load-path "./ob-go")
-;; (require 'ob-go)
-;; (setq org-confirm-babel-evaluate nil)
-;; (save-excursion
-;;   (goto-char
-;;    (org-babel-find-named-block
-;;     "main"))
-;;   (message (format "%s" (org-babel-execute-src-block))))
-#+end_src
-
-#+begin_src elisp :results none :exports none :lexical yes
-(defun get-string-from-file (filePath)
-  "Return filePath's file content."
-  (with-temp-buffer
-    (insert-file-contents filePath)
-    (buffer-string)))
-
-(defun get-go-lang-source (filePath)
-  "Return an org-mode source block with golang"
-  (concat "#+begin_src go\n" (get-string-from-file filePath) "\n#+end_src"))
-#+end_src
-
 # Local Variables:
 # eval: (progn (setq-local orgstrap-min-org-version "8.2.10") (let ((actual (org-version)) (need orgstrap-min-org-version)) (or (fboundp #'orgstrap--confirm-eval) (not need) (string< need actual) (string= need actual) (error "Your Org is too old! %s < %s" actual need))) (defun orgstrap-norm-func--dprp-1\.0 (body) (let ((p (read (concat "(progn\n" body "\n)"))) (m '(defun defun-local defmacro defvar defvar-local defconst defcustom)) print-quoted print-length print-level) (cl-labels ((f (b) (cl-loop for e in b when (listp e) do (or (and (memq (car e) m) (let ((n (nthcdr 4 e))) (and (stringp (nth 3 e)) (or (cl-subseq m 3) n) (f n) (or (setcdr (cddr e) n) t)))) (f e))) p)) (prin1-to-string (f p))))) (unless (boundp 'orgstrap-norm-func) (defvar-local orgstrap-norm-func orgstrap-norm-func-name)) (defun orgstrap-norm-embd (body) (funcall orgstrap-norm-func body)) (unless (fboundp #'orgstrap-norm) (defalias 'orgstrap-norm #'orgstrap-norm-embd)) (defun orgstrap-org-src-coderef-regexp (_fmt &optional label) (let ((fmt org-coderef-label-format)) (format "\\([:blank:]*\\(%s\\)[:blank:]*\\)$" (replace-regexp-in-string "%s" (if label (regexp-quote label) "\\([-a-zA-Z0-9_][-a-zA-Z0-9_ ]*\\)") (regexp-quote fmt) nil t)))) (unless (fboundp #'org-src-coderef-regexp) (defalias 'org-src-coderef-regexp #'orgstrap-org-src-coderef-regexp)) (defun orgstrap--expand-body (info) (let ((coderef (nth 6 info)) (expand (if (org-babel-noweb-p (nth 2 info) :eval) (org-babel-expand-noweb-references info) (nth 1 info)))) (if (not coderef) expand (replace-regexp-in-string (org-src-coderef-regexp coderef) "" expand nil nil 1)))) (defun orgstrap--confirm-eval-portable (lang _body) (not (and (member lang '("elisp" "emacs-lisp")) (let* ((body (orgstrap--expand-body (org-babel-get-src-block-info))) (body-normalized (orgstrap-norm body)) (content-checksum (intern (secure-hash orgstrap-cypher body-normalized)))) (eq orgstrap-block-checksum content-checksum))))) (unless (fboundp #'orgstrap--confirm-eval) (defalias 'orgstrap--confirm-eval #'orgstrap--confirm-eval-portable)) (let (enable-local-eval) (vc-find-file-hook)) (let ((ocbe org-confirm-babel-evaluate) (obs (org-babel-find-named-block "orgstrap"))) (if obs (unwind-protect (save-excursion (setq-local orgstrap-norm-func orgstrap-norm-func-name) (setq-local org-confirm-babel-evaluate #'orgstrap--confirm-eval) (goto-char obs) (org-babel-execute-src-block)) (when (eq org-confirm-babel-evaluate #'orgstrap--confirm-eval) (setq-local org-confirm-babel-evaluate ocbe)) (org-set-visibility-according-to-property)) (warn "No orgstrap block."))))
 # End:
