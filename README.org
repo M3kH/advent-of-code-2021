@@ -24,49 +24,11 @@ Count the number of times a depth measurement increases from the previous measur
 *NB:* /When looping the first item, there is no previous measurement./
 
 #+begin_html
-<details><summary>Solution</summary>
-  <p>
-#+end_html
-
-#+begin_src elisp :format raw :exports results :wrap src go
-(get-string-from-file "./src/challenge/0101.go")
-#+end_src
-
-#+RESULTS:
-#+begin_src go
-package challenge
-
-import (
-	"aoc/utils"
-	"strconv"
-
-	"strings"
-)
-
-func Challenge0101(data string) string {
-	var previous, total int
-
-	depths := utils.StringToNumberConvertion(strings.Split(data, "\n"))
-
-	for index, depth := range depths {
-		if index != 0 && depth > previous {
-			total += 1
-		}
-		previous = depth
-	}
-
-	return strconv.Itoa(total)
-}
-#+end_src
-
-#+begin_html
-</p></details>
-#+end_html
-
-#+begin_html
 <details><summary>Result</summary>
   <p>
 #+end_html
+
+[[file:src/challenge/0101.go][Source]]
 
 #+begin_src bash :format raw :exports both :dir src
 cat ../dataset/01.txt | go run aoc 0101
@@ -83,59 +45,11 @@ cat ../dataset/01.txt | go run aoc 0101
 Count the number of times the sum of measurements in this sliding window increases from the previous sum.
 
 #+begin_html
-<details><summary>Solution</summary>
-  <p>
-#+end_html
-
-#+begin_src elisp :format raw :exports results :wrap src go
-(get-string-from-file "./src/challenge/0102.go")
-#+end_src
-
-#+RESULTS:
-#+begin_src go
-package challenge
-
-import (
-	"aoc/utils"
-	"strconv"
-	"strings"
-)
-
-func Challenge0102(data string) string {
-	var previous, total int
-
-	depths := utils.StringToNumberConvertion(strings.Split(data, "\n"))
-
-	for index, depth := range depths {
-		current := depth
-
-		if index+1 < len(depths) {
-			current = current + depths[index+1]
-		}
-
-		if index+2 < len(depths) {
-			current = current + depths[index+2]
-		}
-
-		if index != 0 && current > previous {
-			total += 1
-		}
-
-		previous = current
-	}
-
-	return strconv.Itoa(total)
-}
-#+end_src
-
-#+begin_html
-</p></details>
-#+end_html
-
-#+begin_html
 <details><summary>Result</summary>
   <p>
 #+end_html
+
+[[file:src/challenge/0102.go][Source]]
 
 #+begin_src bash :format raw :exports both :dir src
 cat ../dataset/01.txt | go run aoc 0102
@@ -152,72 +66,11 @@ cat ../dataset/01.txt | go run aoc 0102
 Calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
 
 #+begin_html
-<details><summary>Solution</summary>
-  <p>
-#+end_html
-
-#+begin_src elisp :format raw :exports results :wrap src go
-(get-string-from-file "./src/challenge/0201.go")
-#+end_src
-
-#+RESULTS:
-#+begin_src go
-package challenge
-
-import (
-	"aoc/utils"
-	"strconv"
-	"strings"
-)
-
-var move = map[string]func(position int, modifier int) int{
-	"down": func(position int, modifier int) int {
-		return position + modifier
-	},
-	"forward": func(position int, modifier int) int {
-		return position + modifier
-	},
-	"up": func(position int, modifier int) int {
-		return position - modifier
-	},
-}
-
-func Challenge0201(data string) string {
-	var x, y int
-
-	records := strings.Split(data, "\n")
-
-	for _, record := range records {
-		instructions := strings.Split(record, " ")
-
-		if len(instructions) == 1 {
-			continue
-		}
-
-		moveTo := instructions[0]
-		atSpeed, err := strconv.Atoi(instructions[1])
-		utils.Check(err)
-
-		if moveTo == "forward" {
-			x = move["forward"](x, atSpeed)
-			continue
-		}
-
-		y = move[moveTo](y, atSpeed)
-	}
-
-	return strconv.Itoa(x * y)
-}
-#+end_src
-
-#+begin_html
-</p></details>
-#+end_html
-
-#+begin_html
 <details><summary>Result</summary>
   <p>
 #+end_html
+
+[[file:src/challenge/0201.go][Source]]
 
 #+begin_src bash :format raw :exports both :dir src
 cat ../dataset/02.txt | go run aoc 0201
@@ -234,69 +87,11 @@ cat ../dataset/02.txt | go run aoc 0201
 Using this new interpretation of the commands, calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
 
 #+begin_html
-<details><summary>Solution</summary>
-  <p>
-#+end_html
-
-#+begin_src elisp :format raw :exports results :wrap src go
-(get-string-from-file "./src/challenge/0202.go")
-#+end_src
-
-#+RESULTS:
-#+begin_src go
-package challenge
-
-import (
-	"aoc/utils"
-	"strconv"
-	"strings"
-)
-
-func Challenge0202(data string) string {
-	var x, y, aim int
-
-	records := strings.Split(data, "\n")
-
-	for _, record := range records {
-		instructions := strings.Split(record, " ")
-
-		if len(instructions) == 1 {
-			continue
-		}
-
-		moveTo := instructions[0]
-		atSpeed, err := strconv.Atoi(instructions[1])
-		utils.Check(err)
-
-		if moveTo == "forward" {
-			x = x + atSpeed
-			y = aim * atSpeed
-			continue
-		}
-
-		if moveTo == "up" {
-			aim = aim - atSpeed
-			continue
-		}
-
-		if moveTo == "down" {
-			aim = aim + atSpeed
-			continue
-		}
-	}
-
-	return strconv.Itoa(x * y)
-}
-#+end_src
-
-#+begin_html
-</p></details>
-#+end_html
-
-#+begin_html
 <details><summary>Result</summary>
   <p>
 #+end_html
+
+[[file:src/challenge/0202.go][Source]]
 
 #+begin_src bash :format raw :exports both :dir src
 cat ../dataset/02.txt | go run aoc 0202
